@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NICE | shere file</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f0f, #1f0505);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+        }
+
+        /* Khung chung cho các màn hình */
+        .card-box {
+            background: rgba(25, 25, 25, 0.95);
+            border: 1px solid #ff4d4d;
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.3);
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .card-box h2 {
+            color: #ff4d4d;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 22px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .input-group input:focus {
+            border-color: #ff4d4d;
+            outline: none;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: #ff3333;
+        }
+
+        .switch-auth {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .switch-auth span {
+            color: #ff4d4d;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .switch-auth span:hover {
+            text-decoration: underline;
+        }
+
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        /* Ẩn hiện các màn hình */
+        #auth-screen, #key-screen, #main-screen {
+            display: none;
+        }
+
+        /* Thanh thông tin User ở góc màn hình */
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(25, 25, 25, 0.9);
+            border: 1px solid #444;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .user-info span {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: rgba(255, 77, 77, 0.2);
+            color: #ff4d4d;
+            border: 1px solid #ff4d4d;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #ff4d4d;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            color: #ff4d4d;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+        }
+
+        /* Thanh tìm kiếm */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(25, 25, 25, 0.9);
+            border: 1px solid #444;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #ff4d4d;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.2);
+        }
+
+        .card {
+            background: rgba(25, 25, 25, 0.95);
+            border: 1px solid #333;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid #333;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .config-title {
+            font-size: 12px;
+            color: #ff4d4d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+        }
+
+        .btn-download {
+            background: #ff4d4d;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
+        }
+
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid #444;
+        }
+
+        .support-box {
+            margin-top: 25px;
+            background: rgba(25, 25, 25, 0.9);
+            border: 1px solid #444;
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .support-email {
+            color: #4da6ff;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: 1px solid #ff4d4d;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- 1. MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
+        <div id="auth-screen">
+            <div class="card-box">
+                <h2 id="auth-title">Đăng Nhập</h2>
+                <div id="error-msg" class="error-msg"></div>
+                
+                <div class="input-group">
+                    <label>Tài khoản</label>
+                    <input type="text" id="username" placeholder="Nhập tài khoản...">
+                </div>
+                <div class="input-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Nhập mật khẩu...">
+                </div>
+
+                <button class="action-btn" id="auth-action-btn" onclick="handleAuth()">Đăng Nhập</button>
+                
+                <div class="switch-auth" id="switch-text">
+                    Chưa có tài khoản? <span onclick="toggleMode()">Đăng ký ngay</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MÀN HÌNH NHẬP KEY 24H -->
+        <div id="key-screen">
+            <div class="card-box">
+                <h2>Xác Thực Key 24h</h2>
+                <div id="key-error-msg" class="error-msg"></div>
+                
+                <div class="input-group">
+                    <label>Nhập Key của bạn</label>
+                    <input type="text" id="key-input" placeholder="Nhập key...">
+                </div>
+
+                <button class="action-btn" onclick="verifyKey()">Xác nhận</button>
+                <a href="https://nicephn.github.io/getkey/" target="_blank" class="action-btn" style="background: rgba(255,255,255,0.1); border:1px solid #444;">Get key</a>
+            </div>
+        </div>
+
+        <!-- 3. MÀN HÌNH CHÍNH (TẬP TRUNG DUY NHẤT FREE FIRE) -->
+        <div id="main-screen">
+            <!-- Thông tin tài khoản, Rank & Thời gian key đếm ngược -->
+            <div class="user-header">
+                <div class="user-info">
+                    👤 <span id="display-user"></span> | Rank: <span id="display-rank"></span><br>
+                    ⏳ Key hết hạn trong: <span id="countdown-timer" style="color: #00ffcc;">24:00:00</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+
+            <h1>NICE | shere file</h1>
+
+            <!-- THANH TÌM KIẾM -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm cấu hình Free Fire..." onkeyup="searchFiles()">
+            </div>
+            
+            <!-- DANH SÁCH CẤU HÌNH FREE FIRE -->
+            <div id="file-list">
+                <!-- Cấu hình 1: Menu ẩn -->
+                <div class="card search-item" data-name="menu an free fire ios adr">
+                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=" alt="Preview" class="card-image" id="previewImg1">
+                    <div class="card-body">
+                        <div class="config-title">Cấu hình 1</div>
+                        <div class="card-title">MENU ÂN</div>
+                        <div class="card-desc">Menu ẩn Free Fire cho iOS & Android (No Key)</div>
+                        <div class="card-actions">
+                            <a href="https://www.mediafire.com/file/9xe4flyejx20lys/MENU+NO+KEY+IOS+-+ADR.zip/file#ob55" class="btn btn-download" target="_blank">📥 Tải file</a>
+                            <button class="btn btn-copy" onclick="copyText('MENU ÂN')">📋 Copy tên</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cấu hình 2: MTH Team Proxy v38 -->
+                <div class="card search-item" data-name="mth team proxy v38 mthteam">
+                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=" alt="Preview" class="card-image" id="previewImg2">
+                    <div class="card-body">
+                        <div class="config-title">Cấu hình 2</div>
+                        <div class="card-title">MTH TEAM PROXY V38</div>
+                        <div class="card-desc">Phiên bản MTH Team Proxy v38 mới nhất</div>
+                        <div class="card-actions">
+                            <a href="https://www.mediafire.com/file/f30pn890kqnvi4/Mthteam-proxy-v38.apk/file" class="btn btn-download" target="_blank">📥 Tải file</a>
+                            <button class="btn btn-copy" onclick="copyText('MTH TEAM PROXY V38')">📋 Copy tên</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN HỖ TRỢ -->
+            <div class="support-box">
+                <a href="mailto:nguyenkhang100525@gmail.com" class="support-email">nguyenkhang100525@gmail.com</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Hộp thoại thông báo -->
+    <div id="toast" class="toast">Đã copy tên cấu hình!</div>
+
+    <script>
+        document.getElementById('previewImg1').src = '11378.jpg';
+        document.getElementById('previewImg2').src = '11378.jpg';
+
+        let isRegisterMode = false;
+        let timerInterval = null;
+
+        window.onload = function() {
+            const currentUser = localStorage.getItem('nice_user');
+            if (currentUser) {
+                checkKeyStatus(currentUser);
+            } else {
+                document.getElementById('auth-screen').style.display = 'block';
+            }
+        }
+
+        function toggleMode() {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('auth-title').innerText = isRegisterMode ? "Đăng Ký Tài Khoản" : "Đăng Nhập";
+            document.getElementById('auth-action-btn').innerText = isRegisterMode ? "Đăng Ký" : "Đăng Nhập";
+            document.getElementById('switch-text').innerHTML = isRegisterMode 
+                ? 'Đã có tài khoản? <span onclick="toggleMode()">Đăng nhập ngay</span>' 
+                : 'Chưa có tài khoản? <span onclick="toggleMode()">Đăng ký ngay</span>';
+            document.getElementById('error-msg').style.display = 'none';
+        }
+
+        function handleAuth() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorBox = document.getElementById('error-msg');
+
+            if (!user || !pass) {
+                errorBox.innerText = "Vui lòng nhập đầy đủ thông tin!";
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            if (isRegisterMode) {
+                if (localStorage.getItem('acc_' + user)) {
+                    errorBox.innerText = "Tài khoản này đã tồn tại!";
+                    errorBox.style.display = 'block';
+                    return;
+                }
+                localStorage.setItem('acc_' + user, pass);
+                alert("Đăng ký thành công! Hãy đăng nhập.");
+                toggleMode();
+            } else {
+                let rank = "Member";
+                if (user === "Niceprimedeptrai" && pass === "nice1m8") {
+                    rank = "Admin";
+                } else {
+                    const storedPass = localStorage.getItem('acc_' + user);
+                    if (!storedPass || storedPass !== pass) {
+                        errorBox.innerText = "Sai tài khoản hoặc mật khẩu!";
+                        errorBox.style.display = 'block';
+                        return;
+                    }
+                }
+
+                localStorage.setItem('nice_user', user);
+                localStorage.setItem('nice_rank', rank);
+                checkKeyStatus(user);
+            }
+        }
+
+        function checkKeyStatus(username) {
+            document.getElementById('auth-screen').style.display = 'none';
+            
+            const keyData = localStorage.getItem('key_time_' + username);
+            const now = new Date().getTime();
+
+            if (keyData && now < parseInt(keyData)) {
+                let rank = localStorage.getItem('nice_rank') || "Member";
+                showMainScreen(username, rank);
+                startCountdown(parseInt(keyData));
+            } else {
+                document.getElementById('key-screen').style.display = 'block';
+            }
+        }
+
+        function verifyKey() {
+            const keyVal = document.getElementById('key-input').value.trim();
+            const errorBox = document.getElementById('key-error-msg');
+            const currentUser = localStorage.getItem('nice_user');
+
+            if (keyVal.startsWith("Nice_")) {
+                const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+                localStorage.setItem('key_time_' + currentUser, expireTime);
+
+                document.getElementById('key-screen').style.display = 'none';
+                let rank = localStorage.getItem('nice_rank') || "Member";
+                showMainScreen(currentUser, rank);
+                startCountdown(expireTime);
+            } else {
+                errorBox.innerText = "Key không hợp lệ! Phải bắt đầu bằng chữ Nice_";
+                errorBox.style.display = 'block';
+            }
+        }
+
+        function startCountdown(expireTime) {
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = expireTime - now;
+
+                if (distance < 0) {
+                    clearInterval(timerInterval);
+                    alert("Key của bạn đã hết hạn sau 24h! Vui lòng nhập lại key mới.");
+                    logout();
+                    return;
+                }
+
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown-timer').innerText = 
+                    (hours < 10 ? "0" + hours : hours) + ":" + 
+                    (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+                    (seconds < 10 ? "0" + seconds : seconds);
+            }, 1000);
+        }
+
+        function showMainScreen(username, rank) {
+            document.getElementById('key-screen').style.display = 'none';
+            document.getElementById('main-screen').style.display = 'block';
+            document.getElementById('display-user').innerText = username;
+            document.getElementById('display-rank').innerText = rank;
+        }
+
+        function logout() {
+            localStorage.removeItem('nice_user');
+            localStorage.removeItem('nice_rank');
+            if (timerInterval) clearInterval(timerInterval);
+            location.reload();
+        }
+
+        function searchFiles() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.querySelectorAll('.search-item');
+
+            items.forEach(item => {
+                let name = item.getAttribute('data-name');
+                if (name.includes(input)) {
+                    item.style.display = "";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
